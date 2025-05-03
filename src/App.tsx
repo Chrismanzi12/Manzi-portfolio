@@ -4,6 +4,7 @@ import './App.css'
 function App() {
   const [activeSection, setActiveSection] = useState('home')
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +14,15 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const handleNavClick = (section: string) => {
+    setActiveSection(section)
+    setIsMobileMenuOpen(false)
+  }
+
   return (
     <div className="app">
       <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
@@ -20,11 +30,14 @@ function App() {
           <div className="logo">
             <h1>Major Fabro</h1>
           </div>
-          <ul className="nav-links">
-            <li><a href="#home" className={activeSection === 'home' ? 'active' : ''} onClick={() => setActiveSection('home')}>Home</a></li>
-            <li><a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={() => setActiveSection('about')}>About</a></li>
-            <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={() => setActiveSection('projects')}>Projects</a></li>
-            <li><a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={() => setActiveSection('contact')}>Contact</a></li>
+          <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+            ☰
+          </button>
+          <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+            <li><a href="#home" className={activeSection === 'home' ? 'active' : ''} onClick={() => handleNavClick('home')}>Home</a></li>
+            <li><a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={() => handleNavClick('about')}>About</a></li>
+            <li><a href="#projects" className={activeSection === 'projects' ? 'active' : ''} onClick={() => handleNavClick('projects')}>Projects</a></li>
+            <li><a href="#contact" className={activeSection === 'contact' ? 'active' : ''} onClick={() => handleNavClick('contact')}>Contact</a></li>
           </ul>
         </nav>
       </header>
@@ -39,7 +52,7 @@ function App() {
             </div>
             <div className="cta-buttons">
               <a href="#projects" className="btn primary">View Projects</a>
-              <a href="/resume.pdf" className="btn secondary">Download CV</a>
+              <a href="/resume.pdf" className="btn secondary" download>Download CV</a>
             </div>
           </div>
         </section>
@@ -133,6 +146,10 @@ function App() {
           </div>
         </section>
       </main>
+
+      <a href="/resume.pdf" className="cv-download" download>
+        Download CV
+      </a>
 
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} Major Fabro</p>
